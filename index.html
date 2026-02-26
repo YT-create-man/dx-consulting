@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商店主・個人事業主のためのDXコンサルティング | 仕事の再設計</title>
+    <meta name="description" content="AIやデジタル技術を活用した「仕事の再設計」で、売上向上と業務効率化を実現。商店主・個人事業主専門のDXコンサルティング。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700;900&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#0F4C81',
+                        accent: '#F58220',
+                        cyan: '#00C2CB',
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans JP', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            scroll-behavior: smooth;
+        }
+
+        /* --- Chart.js Containers --- */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            height: 300px;
+        }
+
+        .chart-container-bar {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            height: 380px;
+        }
+
+        .chart-container-radar {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            height: 400px;
+        }
+
+        /* --- AI Result Styling --- */
+        .ai-content h3 {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: #0F4C81;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 3px solid #00C2CB;
+            display: inline-block;
+            padding-right: 20px;
+            padding-bottom: 4px;
+        }
+
+        .ai-content h4 {
+            font-weight: 900;
+            color: #0F4C81;
+            margin-top: 1.2rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 2px solid #00C2CB;
+            display: inline-block;
+            padding-right: 20px;
+        }
+
+        .ai-content p {
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: #374151;
+        }
+
+        .ai-content ul {
+            list-style-type: none;
+            margin-left: 0;
+            margin-bottom: 1.5rem;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #0F4C81;
+        }
+
+        .ai-content li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .ai-content li::before {
+            content: '✔';
+            position: absolute;
+            left: 0;
+            color: #00C2CB;
+            font-weight: bold;
+        }
+
+        .ai-content strong {
+            color: #0F4C81;
+        }
+
+        /* --- Copy Button Feedback --- */
+        .copy-success {
+            animation: copyFlash 0.5s ease;
+        }
+
+        @keyframes copyFlash {
+            0% {
+                background-color: #00C2CB;
+            }
+
+            100% {
+                background-color: #F58220;
+            }
+        }
+
+        /* --- Scroll Animations --- */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-up-delay-1 {
+            transition-delay: 0.15s;
+        }
+
+        .fade-up-delay-2 {
+            transition-delay: 0.3s;
+        }
+
+        .fade-up-delay-3 {
+            transition-delay: 0.45s;
+        }
+
+        .fade-up-delay-4 {
+            transition-delay: 0.6s;
+        }
+
+        /* --- Mobile Menu Overlay --- */
+        .mobile-menu-overlay {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* --- Decorative --- */
+        .gradient-divider {
+            height: 6px;
+            background: linear-gradient(90deg, #0F4C81, #00C2CB, #F58220);
+            border: none;
+        }
+
+        /* --- Floating Glow on Cards --- */
+        .glow-card {
+            transition: box-shadow 0.4s ease, transform 0.4s ease;
+        }
+
+        .glow-card:hover {
+            box-shadow: 0 20px 60px rgba(0, 194, 203, 0.15), 0 10px 20px rgba(15, 76, 129, 0.08);
+            transform: translateY(-4px);
+        }
+
+        /* --- Scrollbar Styling --- */
+        .ai-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .ai-content::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .ai-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .ai-content::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* --- Tool Card Hover --- */
+        .tool-card {
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+        }
+    </style>
+</head>
+
+<body class="antialiased bg-gray-50 text-gray-800 font-sans">
+
+    <!-- ========================================= -->
+    <!-- ナビゲーション                              -->
+    <!-- ========================================= -->
+    <header class="bg-white/90 backdrop-blur-xl shadow-sm sticky top-0 z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-black text-gray-800 tracking-tighter">
+                <span class="text-cyan">DX</span> Consulting
+            </h1>
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="#philosophy" class="text-gray-500 hover:text-navy font-bold transition-colors">理念</a>
+                <a href="#ai-interactive" class="text-gray-500 hover:text-navy font-bold transition-colors">✨ AI体験</a>
+                <a href="#tools" class="text-gray-500 hover:text-navy font-bold transition-colors">ツール活用</a>
+                <a href="#courses" class="text-gray-500 hover:text-navy font-bold transition-colors">コース・料金</a>
+            </nav>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn"
+                class="md:hidden relative w-8 h-8 flex flex-col items-center justify-center gap-1.5"
+                aria-label="メニューを開く">
+                <span class="block w-6 h-0.5 bg-gray-700 transition-all duration-300" id="bar1"></span>
+                <span class="block w-6 h-0.5 bg-gray-700 transition-all duration-300" id="bar2"></span>
+                <span class="block w-6 h-0.5 bg-gray-700 transition-all duration-300" id="bar3"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="mobile-menu-overlay fixed inset-0 z-40 bg-navy/95 backdrop-blur-xl flex flex-col items-center justify-center">
+        <nav class="flex flex-col items-center gap-8 text-white text-2xl font-black">
+            <a href="#philosophy" class="mobile-nav-link hover:text-cyan transition-colors">理念</a>
+            <a href="#ai-interactive" class="mobile-nav-link hover:text-cyan transition-colors">✨ AI体験</a>
+            <a href="#tools" class="mobile-nav-link hover:text-cyan transition-colors">ツール活用</a>
+            <a href="#courses" class="mobile-nav-link hover:text-cyan transition-colors">コース・料金</a>
+        </nav>
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- ヒーローセクション                          -->
+    <!-- ========================================= -->
+    <section class="bg-navy text-white py-24 md:py-32 relative overflow-hidden">
+        <!-- Decorative Background -->
+        <div class="absolute inset-0 opacity-[0.07]">
+            <div class="absolute top-10 left-10 w-72 h-72 bg-cyan rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-accent rounded-full blur-[150px]"></div>
+        </div>
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+                <span
+                    class="inline-block py-1.5 px-4 rounded-full bg-accent text-white text-sm font-bold mb-6 shadow-lg shadow-accent/30">仕事の再設計と伴走支援</span>
+                <h2 class="text-4xl md:text-5xl font-black leading-tight mb-8">
+                    そのDX、<br><span class="text-cyan">「道具」</span>を入れるだけで<br class="md:hidden">終わらせない。
+                </h2>
+                <p class="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed">
+                    AIを単なるツールではなく、あなたの「右腕」へ。<br>
+                    人とデジタルの役割を再設計し、<br class="md:hidden">ビジネスを次のステージへ導きます。
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#ai-interactive"
+                        class="bg-cyan hover:bg-white hover:text-navy text-white font-black py-4 px-10 rounded-xl shadow-2xl shadow-cyan/30 transition-all transform hover:-translate-y-1">
+                        AIで無料診断を開始する ✨
+                    </a>
+                </div>
+            </div>
+            <div class="hidden md:block">
+                <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-10 border border-white/20 shadow-2xl">
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between p-5 bg-white/20 rounded-2xl">
+                            <span class="text-3xl">👩‍💼</span>
+                            <div class="w-full mx-6 h-3 bg-gray-300/30 rounded-full overflow-hidden">
+                                <div class="h-full bg-accent shadow-[0_0_15px_rgba(245,130,32,0.5)] rounded-full"
+                                    style="width: 85%"></div>
+                            </div>
+                            <span class="font-black whitespace-nowrap">創造的業務</span>
+                        </div>
+                        <div class="text-center py-2">
+                            <span class="text-cyan text-3xl font-bold animate-bounce block">↓ RE-DESIGN ↓</span>
+                        </div>
+                        <div class="flex items-center justify-between p-5 bg-white/20 rounded-2xl">
+                            <span class="text-3xl">🤖</span>
+                            <div class="w-full mx-6 h-3 bg-gray-300/30 rounded-full overflow-hidden">
+                                <div class="h-full bg-cyan shadow-[0_0_15px_rgba(0,194,203,0.5)] rounded-full"
+                                    style="width: 95%"></div>
+                            </div>
+                            <span class="font-black whitespace-nowrap">自動化業務</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="gradient-divider">
+
+
+    <!-- ========================================= -->
+    <!-- 理念セクション (ドーナツチャート)             -->
+    <!-- ========================================= -->
+    <section id="philosophy" class="py-20 md:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-up">
+                <span
+                    class="inline-block py-1 px-4 rounded-full bg-navy/10 text-navy text-sm font-bold mb-4">PHILOSOPHY</span>
+                <h3 class="text-3xl md:text-4xl font-black text-gray-800 mb-6">仕事の「再設計」で、<span
+                        class="text-cyan">時間</span>と<span class="text-accent">価値</span>を取り戻す</h3>
+                <p class="text-lg text-gray-500 max-w-3xl mx-auto leading-relaxed">
+                    これからのDXは、単なるデジタル化ではありません。<br class="hidden sm:inline">
+                    人が本来集中すべき「価値を生む仕事」にシフトするための<strong class="text-navy">仕事の再設計</strong>です。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
+                <!-- Before -->
+                <div class="bg-gray-50 rounded-3xl p-8 md:p-10 text-center glow-card fade-up fade-up-delay-1">
+                    <div
+                        class="inline-block py-1 px-4 rounded-full bg-red-100 text-red-600 text-xs font-black mb-6 tracking-widest">
+                        BEFORE — 導入前</div>
+                    <div class="chart-container mx-auto">
+                        <canvas id="donutBefore"></canvas>
+                    </div>
+                    <p class="mt-6 text-sm text-gray-500 font-bold">事務作業・管理業務に追われ、<br>本業に集中できない状態</p>
+                </div>
+                <!-- After -->
+                <div
+                    class="bg-gradient-to-br from-navy/5 to-cyan/5 rounded-3xl p-8 md:p-10 text-center border-2 border-cyan/20 glow-card fade-up fade-up-delay-2">
+                    <div
+                        class="inline-block py-1 px-4 rounded-full bg-cyan/10 text-cyan text-xs font-black mb-6 tracking-widest">
+                        AFTER — 導入後</div>
+                    <div class="chart-container mx-auto">
+                        <canvas id="donutAfter"></canvas>
+                    </div>
+                    <p class="mt-6 text-sm text-navy font-bold">AIが単純作業を担い、<br>創造的業務に時間を投資できる状態</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- AI インタラクティブ診断                      -->
+    <!-- ========================================= -->
+    <section id="ai-interactive" class="py-20 md:py-28 bg-gradient-to-br from-white via-blue-50/50 to-cyan/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-up">
+                <span class="inline-block py-1 px-4 rounded-full bg-accent/10 text-accent text-sm font-bold mb-4">AI
+                    DIAGNOSTIC</span>
+                <h3 class="text-3xl md:text-4xl font-black text-gray-800 mb-6">✨ AI診断：未来の「仕事のカタチ」を提案</h3>
+                <p class="text-lg text-gray-500 max-w-3xl mx-auto leading-relaxed">
+                    現在の業種とお悩みを入力してください。Gemini AIがあなたのビジネスを分析し、<br class="hidden sm:inline">最適なプランと「お渡し用提案資料」を生成します。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+                <!-- 入力パネル -->
+                <div
+                    class="bg-white p-8 md:p-10 rounded-3xl shadow-2xl shadow-navy/5 border border-blue-100 fade-up fade-up-delay-1">
+                    <div class="space-y-8">
+                        <!-- API Key Input -->
+                        <div id="apikey-section">
+                            <label class="block text-sm font-black text-gray-700 mb-3 tracking-widest">🔑 APIキー</label>
+                            <div class="flex gap-2">
+                                <input type="password" id="apikey-input" placeholder="Gemini APIキーを入力"
+                                    class="flex-1 p-3 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-cyan focus:ring-4 focus:ring-cyan/10 outline-none transition-all text-sm font-bold">
+                                <button id="apikey-save-btn"
+                                    class="bg-cyan hover:bg-cyan/80 text-white font-black px-5 py-3 rounded-xl text-sm transition-all">保存</button>
+                            </div>
+                            <p id="apikey-status" class="text-xs text-gray-400 mt-2">※
+                                このタブを閉じるとキーは自動消去されます（ソースコードには保存されません）</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-black text-gray-700 mb-3 tracking-widest">1. あなたの業種</label>
+                            <input type="text" id="business-type" placeholder="例：地域密着型のベーカリー"
+                                class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-cyan focus:ring-4 focus:ring-cyan/10 outline-none transition-all text-lg font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-black text-gray-700 mb-3 tracking-widest">2.
+                                具体的なお悩み</label>
+                            <textarea id="business-problem" rows="5"
+                                placeholder="例：SNSでの集客を強化したいが、毎日の投稿案を考える時間が取れない。常連客の名簿管理も手書きで非効率。"
+                                class="w-full p-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:border-cyan focus:ring-4 focus:ring-cyan/10 outline-none transition-all text-lg font-bold"></textarea>
+                        </div>
+                        <button id="generate-diagnostic"
+                            class="w-full bg-navy hover:bg-[#0a3a64] text-white font-black py-5 rounded-2xl shadow-xl shadow-navy/20 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-3 group">
+                            <span class="text-xl">AI診断を開始する</span>
+                            <span class="text-2xl group-hover:translate-x-1 transition-transform">✨</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 結果パネル -->
+                <div
+                    class="bg-white p-8 md:p-10 rounded-3xl shadow-2xl shadow-accent/5 border border-orange-100 min-h-[550px] relative flex flex-col fade-up fade-up-delay-2">
+                    <div id="ai-loading"
+                        class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-3xl">
+                        <div class="relative">
+                            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-accent"></div>
+                            <div class="absolute inset-0 animate-ping rounded-full h-16 w-16 border-2 border-accent/20">
+                            </div>
+                        </div>
+                        <p class="mt-6 font-black text-gray-700 text-lg">AIコンサルタントがプランを策定中...</p>
+                        <p class="mt-2 text-sm text-gray-400">通常30秒〜1分ほどお待ちください</p>
+                    </div>
+
+                    <div id="ai-placeholder"
+                        class="flex-grow flex flex-col items-center justify-center text-center text-gray-300">
+                        <div class="text-8xl mb-6">📝</div>
+                        <p class="text-xl font-bold">診断結果と提案資料が<br>ここに表示されます</p>
+                    </div>
+
+                    <div id="ai-result-container" class="hidden flex flex-col h-full">
+                        <div id="ai-result" class="ai-content flex-grow overflow-y-auto mb-8 pr-2 max-h-[500px]">
+                            <!-- ここにAIの回答が入る -->
+                        </div>
+
+                        <!-- コピーボタン -->
+                        <div class="pt-6 border-t border-gray-100">
+                            <button id="copy-result-btn"
+                                class="w-full bg-accent hover:bg-[#e0750f] text-white font-black py-4 rounded-2xl shadow-2xl shadow-accent/30 flex items-center justify-center gap-3 transition-all transform hover:scale-[1.03]">
+                                <span class="text-lg">� 診断結果をコピーする</span>
+                            </button>
+                            <p class="text-center text-xs text-gray-400 mt-3 font-bold">
+                                ※テキストをクリップボードにコピーします。別のAIツールに貼り付けて提案書を作成できます。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- AIツール活用効果（棒グラフ）                  -->
+    <!-- ========================================= -->
+    <section id="tools" class="py-20 md:py-28 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-up">
+                <span class="inline-block py-1 px-4 rounded-full bg-cyan/10 text-cyan text-sm font-bold mb-4">AI
+                    TOOLS</span>
+                <h3 class="text-3xl md:text-4xl font-black text-gray-800 mb-6">AIツール導入で<span
+                        class="text-accent">どれだけ時短</span>できる？</h3>
+                <p class="text-lg text-gray-500 max-w-3xl mx-auto leading-relaxed">
+                    私たちが推奨するAIツールを導入することで、日常業務の所要時間が劇的に変わります。
+                </p>
+            </div>
+
+            <!-- Bar Chart -->
+            <div class="bg-white rounded-3xl p-6 md:p-10 shadow-xl shadow-navy/5 mb-16 fade-up fade-up-delay-1">
+                <h4 class="text-xl font-black text-navy mb-2 text-center">ツール導入による時間削減効果</h4>
+                <p class="text-sm text-gray-400 text-center mb-6">1回あたりの業務所要時間（分）</p>
+                <div class="chart-container-bar">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Tool Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <div
+                    class="tool-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 fade-up fade-up-delay-1">
+                    <div class="text-4xl mb-4">�</div>
+                    <h5 class="text-lg font-black text-navy mb-2">ChatGPT / Gemini</h5>
+                    <p class="text-sm text-gray-500 leading-relaxed">対話・文案作成。メール返信、SNS投稿文案、キャッチコピー案の作成に。</p>
+                </div>
+                <div
+                    class="tool-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 fade-up fade-up-delay-2">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h5 class="text-lg font-black text-navy mb-2">Canva</h5>
+                    <p class="text-sm text-gray-500 leading-relaxed">デザイン・動画制作。店頭POP、チラシ、SNS画像、デジタルサイネージ用動画も。</p>
+                </div>
+                <div
+                    class="tool-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 fade-up fade-up-delay-3">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h5 class="text-lg font-black text-navy mb-2">Gamma</h5>
+                    <p class="text-sm text-gray-500 leading-relaxed">プレゼン資料作成。補助金申請や事業計画を美しいスライドへ自動変換。</p>
+                </div>
+                <div
+                    class="tool-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 fade-up fade-up-delay-4">
+                    <div class="text-4xl mb-4">🔍</div>
+                    <h5 class="text-lg font-black text-navy mb-2">Perplexity</h5>
+                    <p class="text-sm text-gray-500 leading-relaxed">最新情報検索。地域トレンド、競合調査、補助金情報の正確なリサーチ。</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div
+                    class="tool-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 fade-up fade-up-delay-1">
+                    <div class="text-4xl mb-4">📓</div>
+                    <h5 class="text-lg font-black text-navy mb-2">NotebookLM</h5>
+                    <p class="text-sm text-gray-500 leading-relaxed">情報分析・資料整理。手引書やメニュー表を読み込みQ&A対応や要約を作成。</p>
+                </div>
+                <div
+                    class="tool-card bg-white rounded-2xl p-6 shadow-lg border border-cyan/30 bg-cyan/5 fade-up fade-up-delay-2">
+                    <div class="text-4xl mb-4">🤖</div>
+                    <h5 class="text-lg font-black text-navy mb-2">GenSpark <span
+                            class="text-xs text-cyan font-bold bg-cyan/10 px-2 py-0.5 rounded-full ml-1">2026年新導入</span>
+                    </h5>
+                    <p class="text-sm text-gray-500 leading-relaxed">AIエージェントが自動でリサーチ・比較・まとめを行い、最適な回答ページを生成。</p>
+                </div>
+                <div
+                    class="tool-card bg-white rounded-2xl p-6 shadow-lg border border-accent/30 bg-accent/5 fade-up fade-up-delay-3">
+                    <div class="text-4xl mb-4">📖</div>
+                    <h5 class="text-lg font-black text-navy mb-2">Teachme Biz <span
+                            class="text-xs text-accent font-bold bg-accent/10 px-2 py-0.5 rounded-full ml-1">レギュラー基幹</span>
+                    </h5>
+                    <p class="text-sm text-gray-500 leading-relaxed">業務マニュアル化。手順を動画・写真で可視化し、属人化を解消。</p>
+                </div>
+                <div
+                    class="tool-card bg-white rounded-2xl p-6 shadow-lg border border-gray-100 fade-up fade-up-delay-4">
+                    <div class="text-4xl mb-4">🌐</div>
+                    <h5 class="text-lg font-black text-navy mb-2">Studio <span
+                            class="text-xs text-gray-400 font-bold bg-gray-100 px-2 py-0.5 rounded-full ml-1">オプション</span>
+                    </h5>
+                    <p class="text-sm text-gray-500 leading-relaxed">WEBサイト制作。店舗HPやLPを低コスト・短期間で構築・保守。</p>
+                </div>
+            </div>
+            <p class="text-center text-sm text-gray-400 mt-6 fade-up">※ 全ツールのGoogle Workspace（Gmail, カレンダー,
+                ドライブ等）連携により、プライバシー管理も安心です。</p>
+        </div>
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- 料金プラン + レーダーチャート                  -->
+    <!-- ========================================= -->
+    <section id="courses" class="py-20 md:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-up">
+                <span
+                    class="inline-block py-1 px-4 rounded-full bg-accent/10 text-accent text-sm font-bold mb-4">PRICING</span>
+                <h3 class="text-3xl md:text-4xl font-black text-gray-800 mb-6">DX実践コース・料金体系</h3>
+                <p class="text-lg text-gray-500 max-w-3xl mx-auto">あなたの目的に合わせて、2つのコースからお選びいただけます。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto mb-20">
+                <!-- Entry -->
+                <div
+                    class="bg-gray-50 p-8 md:p-10 rounded-3xl border-2 border-gray-100 flex flex-col glow-card fade-up fade-up-delay-1">
+                    <h4 class="text-2xl font-black text-gray-500 mb-4">DX Style Entry</h4>
+                    <div class="text-5xl font-black text-gray-800 mb-2">¥12,000</div>
+                    <p class="text-sm text-gray-400 mb-8">/月 (税抜)</p>
+                    <ul class="space-y-4 text-gray-600 mb-10 flex-grow">
+                        <li class="flex items-start gap-3 font-bold"><span class="text-cyan text-lg">✔</span>
+                            デジタル基礎・安全講習</li>
+                        <li class="flex items-start gap-3 font-bold"><span class="text-cyan text-lg">✔</span>
+                            くらし・仕事のデジタル窓口</li>
+                        <li class="flex items-start gap-3 font-bold"><span class="text-cyan text-lg">✔</span>
+                            全国のLounge利用特典</li>
+                    </ul>
+                    <div class="text-center font-bold text-gray-400 border-t border-gray-200 pt-6">デジタル化の土台作りに</div>
+                </div>
+
+                <!-- Regular -->
+                <div
+                    class="bg-white p-8 md:p-10 rounded-3xl border-4 border-accent shadow-2xl shadow-accent/10 flex flex-col relative transform md:-translate-y-4 glow-card fade-up fade-up-delay-2">
+                    <div
+                        class="absolute -top-5 right-10 bg-accent text-white text-sm font-black px-6 py-2 rounded-full shadow-lg shadow-accent/30">
+                        おすすめ</div>
+                    <h4 class="text-2xl font-black text-navy mb-4">DX Style Regular</h4>
+                    <div class="text-5xl font-black text-accent mb-2">¥20,000</div>
+                    <p class="text-sm text-gray-400 mb-8">/月 (税抜) ※2025年改定</p>
+                    <ul class="space-y-4 text-gray-700 mb-10 flex-grow">
+                        <li class="flex items-start gap-3 font-black"><span class="text-accent text-lg">✔</span>
+                            AIエージェント「GenSpark」活用支援</li>
+                        <li class="flex items-start gap-3 font-black"><span class="text-accent text-lg">✔</span> 販促AI支援
+                            (Canva / Gemini / Gamma)</li>
+                        <li class="flex items-start gap-3 font-black"><span class="text-accent text-lg">✔</span>
+                            専任担当による「仕事の再設計」伴走</li>
+                        <li class="flex items-start gap-3 font-black"><span class="text-accent text-lg">✔</span>
+                            ホームページ・動画制作サポート</li>
+                    </ul>
+                    <div class="text-center font-black text-navy border-t border-accent/20 pt-6">より具体的な「仕事の再設計」に</div>
+                </div>
+            </div>
+
+            <!-- Radar Chart -->
+            <div
+                class="bg-gradient-to-br from-navy/5 to-cyan/5 rounded-3xl p-8 md:p-12 max-w-3xl mx-auto border border-navy/10 fade-up">
+                <h4 class="text-2xl font-black text-navy mb-2 text-center">コース別・強み比較</h4>
+                <p class="text-sm text-gray-400 text-center mb-8">5つの観点で各コースの特長を比較</p>
+                <div class="chart-container-radar">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========================================= -->
+    <!-- フッター                                   -->
+    <!-- ========================================= -->
+    <hr class="gradient-divider">
+    <footer class="bg-gray-900 text-white py-16 md:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- SDSL 20K Project Section -->
+            <div class="mb-12">
+                <div class="flex flex-col md:flex-row gap-8 items-start">
+                    <!-- Logo Area -->
+                    <div class="flex-shrink-0">
+                        <p class="text-[10px] text-gray-500 tracking-[0.2em] leading-tight mb-1">
+                            SUSTAINABLE<br>DEVELOPMENT for</p>
+                        <p class="text-2xl font-black italic text-white leading-tight">SmartLife<span
+                                class="text-cyan text-lg align-super">&reg;</span></p>
+                        <div class="mt-3">
+                            <p class="text-5xl font-black text-white leading-none">20<span class="text-cyan">k</span>
+                            </p>
+                            <p class="text-xs tracking-[0.35em] text-gray-400 mt-1">P R O J E C T</p>
+                        </div>
+                        <p class="text-[9px] text-gray-600 mt-2 leading-relaxed max-w-[160px]">
+                            持続可能な社会の実現に向け<br>生活者の“スマートライフ”を支援する人材<br>2万人創出プロジェクト</p>
+                    </div>
+                    <!-- Description -->
+                    <div class="flex-1">
+                        <p class="text-sm text-gray-300 leading-relaxed mb-4">
+                            &ldquo;SDSLプロジェクト20K&rdquo;はSDSLの活動趣旨に適う人材の2万人創出を目的に、育成制度の提供・成長や挑戦の機会創出・経済的応援を通し、SDSL活動を地域に普及するものです。
+                        </p>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-4">
+                            本プロジェクトは、SDSL活動の発起人であり、&ldquo;デジタル化する社会の生活者のスマートライフ実現&rdquo;の提唱者である株式会社ピーシーデポコーポレーション（ならびにその創設者野島隆久）が主宰しています。
+                        </p>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-4">
+                            同社が長年蓄積した人材育成や活動のノウハウをオープンプラットフォーム化し、SDSL活動に賛同する方々が、規模の大小に関わらず本活動に参加し、プロジェクトを立ち上げることなどを通し2万人の人材創出を推進するものです。
+                        </p>
+                        <p class="text-xs text-gray-500">※SDSL活動＝Sustainable Development for Smart Life</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="border-t border-gray-800 pt-10 mb-10">
+                <p class="text-center text-gray-400 font-bold mb-6">お気軽にご相談ください</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                    <div class="bg-gray-800/60 rounded-2xl p-6 text-center">
+                        <p class="text-sm text-gray-400 mb-2">港南台地域担当</p>
+                        <p class="text-2xl font-black text-white mb-3">田中</p>
+                        <p class="text-2xl font-black text-cyan tracking-wider">045-352-7635</p>
+                    </div>
+                    <div class="bg-gray-800/60 rounded-2xl p-6 text-center">
+                        <p class="text-sm text-gray-400 mb-2">横須賀地域担当</p>
+                        <p class="text-2xl font-black text-white mb-3">浅川</p>
+                        <p class="text-2xl font-black text-cyan tracking-wider">046-825-5558</p>
+                    </div>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-4">受付時間：10:00〜18:00（年末年始を除く）</p>
+            </div>
+
+            <div class="text-sm text-gray-600 border-t border-gray-800 pt-8 text-center">
+                &copy; 2025 PC DEPOT CORPORATION. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ========================================= -->
+    <!-- JavaScript                                -->
+    <!-- ========================================= -->
+    <script>
+        // ============================
+        // 1. Mobile Menu
+        // ============================
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const bars = [document.getElementById('bar1'), document.getElementById('bar2'), document.getElementById('bar3')];
+        let menuOpen = false;
+
+        mobileMenuBtn.addEventListener('click', () => {
+            menuOpen = !menuOpen;
+            mobileMenu.classList.toggle('active', menuOpen);
+            if (menuOpen) {
+                bars[0].style.transform = 'rotate(45deg) translate(4px, 4px)';
+                bars[1].style.opacity = '0';
+                bars[2].style.transform = 'rotate(-45deg) translate(4px, -4px)';
+            } else {
+                bars[0].style.transform = '';
+                bars[1].style.opacity = '1';
+                bars[2].style.transform = '';
+            }
+        });
+
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                menuOpen = false;
+                mobileMenu.classList.remove('active');
+                bars[0].style.transform = '';
+                bars[1].style.opacity = '1';
+                bars[2].style.transform = '';
+            });
+        });
+
+
+        // ============================
+        // 2. Scroll Animations
+        // ============================
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+
+        // ============================
+        // 3. Chart.js — Donut Charts
+        // ============================
+        const chartFont = { family: "'Noto Sans JP', sans-serif", weight: 'bold' };
+
+        // Before
+        new Chart(document.getElementById('donutBefore'), {
+            type: 'doughnut',
+            data: {
+                labels: ['事務作業', '管理業務', '移動・待機', '接客・営業', '企画・創造'],
+                datasets: [{
+                    data: [30, 25, 15, 20, 10],
+                    backgroundColor: ['#94A3B8', '#CBD5E1', '#E2E8F0', '#F58220', '#0F4C81'],
+                    borderWidth: 0,
+                    hoverOffset: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { ...chartFont, size: 11 }, padding: 16, usePointStyle: true, pointStyleWidth: 10 } },
+                    tooltip: { titleFont: chartFont, bodyFont: chartFont }
+                }
+            }
+        });
+
+        // After
+        new Chart(document.getElementById('donutAfter'), {
+            type: 'doughnut',
+            data: {
+                labels: ['事務作業(AI)', '管理業務(AI)', '接客・営業', '企画・創造', '新規事業'],
+                datasets: [{
+                    data: [10, 10, 25, 35, 20],
+                    backgroundColor: ['#CBD5E1', '#E2E8F0', '#F58220', '#0F4C81', '#00C2CB'],
+                    borderWidth: 0,
+                    hoverOffset: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { ...chartFont, size: 11 }, padding: 16, usePointStyle: true, pointStyleWidth: 10 } },
+                    tooltip: { titleFont: chartFont, bodyFont: chartFont }
+                }
+            }
+        });
+
+
+        // ============================
+        // 4. Chart.js — Horizontal Bar
+        // ============================
+        new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: ['市場リサーチ (GenSpark)', 'SNS投稿文案 (ChatGPT/Gemini)', 'チラシ・POP作成 (Canva)', '資料要約・Q&A (NotebookLM)', 'プレゼン資料 (Gamma)', 'マニュアル作成 (Teachme Biz)'],
+                datasets: [
+                    {
+                        label: '導入前（手作業）',
+                        data: [120, 60, 90, 45, 60, 120],
+                        backgroundColor: '#CBD5E1',
+                        borderRadius: 6,
+                        barPercentage: 0.6,
+                    },
+                    {
+                        label: '導入後（AIツール活用）',
+                        data: [15, 10, 15, 5, 10, 20],
+                        backgroundColor: '#00C2CB',
+                        borderRadius: 6,
+                        barPercentage: 0.6,
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: { display: true, text: '所要時間（分）', font: { ...chartFont, size: 12 }, color: '#6B7280' },
+                        grid: { color: '#F3F4F6' },
+                        ticks: { font: { ...chartFont, size: 11 } }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { ...chartFont, size: 12 } }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'top', labels: { font: { ...chartFont, size: 12 }, usePointStyle: true, pointStyleWidth: 10, padding: 20 } },
+                    tooltip: {
+                        titleFont: chartFont, bodyFont: chartFont,
+                        callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.raw}分` }
+                    }
+                }
+            }
+        });
+
+
+        // ============================
+        // 5. Chart.js — Radar Chart
+        // ============================
+        new Chart(document.getElementById('radarChart'), {
+            type: 'radar',
+            data: {
+                labels: ['AI活用', '伴走サポート', 'コスト', 'デジタル基礎', '自動化'],
+                datasets: [
+                    {
+                        label: 'DX Style Entry',
+                        data: [2, 2, 5, 5, 2],
+                        backgroundColor: 'rgba(203, 213, 225, 0.25)',
+                        borderColor: '#94A3B8',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#94A3B8',
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                    },
+                    {
+                        label: 'DX Style Regular',
+                        data: [5, 5, 3, 5, 5],
+                        backgroundColor: 'rgba(245, 130, 32, 0.15)',
+                        borderColor: '#F58220',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#F58220',
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 5,
+                        ticks: { stepSize: 1, font: { ...chartFont, size: 10 }, backdropColor: 'transparent' },
+                        pointLabels: { font: { ...chartFont, size: 13 }, color: '#374151' },
+                        grid: { color: '#E5E7EB' },
+                        angleLines: { color: '#E5E7EB' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { ...chartFont, size: 13 }, usePointStyle: true, pointStyleWidth: 10, padding: 20 } },
+                    tooltip: { titleFont: chartFont, bodyFont: chartFont }
+                }
+            }
+        });
+
+
+        // ============================
+        // 6. Gemini API
+        // ============================
+
+        // --- API Key Management (sessionStorage) ---
+        const apikeySection = document.getElementById('apikey-section');
+        const apikeyInput = document.getElementById('apikey-input');
+        const apikeySaveBtn = document.getElementById('apikey-save-btn');
+        const apikeyStatus = document.getElementById('apikey-status');
+
+        // Restore from sessionStorage: hide section if key exists
+        if (sessionStorage.getItem('gemini_api_key')) {
+            apikeySection.classList.add('hidden');
+        }
+
+        apikeySaveBtn.addEventListener('click', () => {
+            const key = apikeyInput.value.trim();
+            if (!key || key.length < 10) { alert('有効なAPIキーを入力してください'); return; }
+            sessionStorage.setItem('gemini_api_key', key);
+            apikeySection.classList.add('hidden');
+        });
+
+        function getApiKey() {
+            return sessionStorage.getItem('gemini_api_key') || '';
+        }
+
+        async function callGemini(userQuery, systemPrompt) {
+            const key = getApiKey();
+            if (!key) {
+                return '⚠️ APIキーが設定されていません。上部の「🔑 APIキー」欄にキーを入力して保存してください。';
+            }
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+            try {
+                const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    const errorMsg = errorData?.error?.message || response.statusText;
+                    console.error('Gemini API Error:', response.status, errorMsg);
+                    return `⚠️ APIエラー (${response.status}): ${errorMsg}`;
+                }
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text;
+            } catch (e) {
+                console.error('Gemini API Error:', e);
+                return `⚠️ 接続エラー: ${e.message}`;
+            }
+        }
+
+        // Store raw markdown for copy
+        let lastRawMarkdown = '';
+
+        // Improved Markdown parser
+        function parseMarkdown(text) {
+            if (!text) return '';
+            lastRawMarkdown = text;
+
+            let html = text
+                // Horizontal rules
+                .replace(/^---+$/gm, '<hr style="border:none; border-top:2px solid #E5E7EB; margin:1.5rem 0;">')
+                // Headers (order matters: longest first)
+                .replace(/^#### (.+)$/gm, '<h5 style="font-weight:900; color:#374151; margin:1rem 0 0.4rem; font-size:0.95rem;">$1</h5>')
+                .replace(/^### (.+)$/gm, '<h4>$1</h4>')
+                .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+                .replace(/^# (.+)$/gm, '<h3 style="font-size:1.3rem; color:#0F4C81; border-bottom:3px solid #F58220; padding-bottom:6px;">$1</h3>')
+                // Bold
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                // Italic (but not inside list markers)
+                .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>')
+                // Numbered lists
+                .replace(/^(\d+)\. (.+)$/gm, '<li class="numbered"><strong>$1.</strong> $2</li>')
+                // Bullet lists
+                .replace(/^[\-\*] (.+)$/gm, '<li>$1</li>');
+
+            // Wrap consecutive <li> in <ul>
+            html = html.replace(/((?:<li[^>]*>.*<\/li>\s*)+)/g, '<ul>$1</ul>');
+
+            // Paragraphs: split by double newline
+            html = html.split('\n\n').map(block => {
+                block = block.trim();
+                if (!block) return '';
+                if (block.startsWith('<h') || block.startsWith('<ul') || block.startsWith('<hr') || block.startsWith('<li')) return block;
+                return `<p>${block.replace(/\n/g, '<br>')}</p>`;
+            }).join('');
+
+            return html;
+        }
+
+        const diagBtn = document.getElementById('generate-diagnostic');
+        const aiResult = document.getElementById('ai-result');
+        const aiContainer = document.getElementById('ai-result-container');
+        const aiPlaceholder = document.getElementById('ai-placeholder');
+        const aiLoading = document.getElementById('ai-loading');
+
+        diagBtn.addEventListener('click', async () => {
+            const bizType = document.getElementById('business-type').value.trim();
+            const bizProblem = document.getElementById('business-problem').value.trim();
+            if (!bizType || !bizProblem) { alert('業種と具体的なお悩みを入力してください。'); return; }
+
+            aiPlaceholder.classList.add('hidden');
+            aiContainer.classList.add('hidden');
+            aiLoading.classList.remove('hidden');
+            diagBtn.disabled = true;
+            diagBtn.style.opacity = '0.6';
+
+            const systemPrompt = `あなたは商店主・個人事業主専門のDXコンサルタントです。
+相手の悩みに深く共感し、以下のツール群を具体的にどう使えば仕事が楽になり、売上が上がるかを「仕事の再設計（リデザイン）」という視点で提案してください。
+
+【重要】以下のツールのみを提案に含めてください。各ツールの役割は以下の通りです。これ以外の役割を捨造しないでください。
+1. ChatGPT / Gemini — 対話・文案作成（メール返信、SNS投稿文案、キャッチコピー案）
+2. Canva — デザイン・動画制作（店頭POP、チラシ、看板、SNS画像、デジタルサイネージ用動画）
+3. Gamma — プレゼン資料作成（補助金申請、事業計画のスライド自動変換）
+4. Perplexity — 最新情報検索（地域トレンド、競合調査、補助金情報のリサーチ）
+5. NotebookLM — 情報分析・資料整理（複雑な手引書やメニュー表を読み込み、Q&A対応や要約資料作成）
+6. GenSpark — AIエージェント活用（AIが自動でリサーチ・比較・まとめを行い、最適な回答ページを生成）
+7. Teachme Biz — 業務マニュアル化（手順を動画・写真で可視化し、スタッフ教育や属人化解消）
+8. Studio — WEBサイト制作（店舗HPやLPを低コストで構築・保守、オプション）
+※ Google Workspace — 総合ツール（Gmail, カレンダー, ドライブ等のGoogleサービス、ドメイン管理、プライバシー管理）
+
+以下の構成で回答してください：
+### 🔍 現状分析
+### 🛠️ 推奨ツールと活用法
+### 📐 仕事の再設計案
+### 📋 アクションプラン（3ステップ）
+### 💪 応援メッセージ
+
+Markdown形式（見出し、箇条書き、太字）で回答してください。具体的で実践的な内容にしてください。`;
+
+            const query = `業種：${bizType}\n悩み：${bizProblem}\nこの課題に対するDXロードマップを提示してください。`;
+
+            const res = await callGemini(query, systemPrompt);
+            aiResult.innerHTML = parseMarkdown(res);
+
+            aiLoading.classList.add('hidden');
+            aiContainer.classList.remove('hidden');
+            diagBtn.disabled = false;
+            diagBtn.style.opacity = '1';
+
+            aiContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+
+
+        // ============================
+        // 7. Copy to Clipboard
+        // ============================
+        document.getElementById('copy-result-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('copy-result-btn');
+            const bizType = document.getElementById('business-type').value;
+            const bizProblem = document.getElementById('business-problem').value;
+
+            const copyText = `【DX診断結果】\n業種: ${bizType}\n課題: ${bizProblem}\n\n${lastRawMarkdown}`;
+
+            try {
+                await navigator.clipboard.writeText(copyText);
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<span class="text-lg">✅ コピーしました！</span>';
+                btn.classList.add('copy-success');
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('copy-success');
+                }, 2000);
+            } catch (err) {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = copyText;
+                textarea.style.position = 'fixed';
+                textarea.style.left = '-9999px';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<span class="text-lg">✅ コピーしました！</span>';
+                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+            }
+        });
+    </script>
+
+</body>
+
+</html>
